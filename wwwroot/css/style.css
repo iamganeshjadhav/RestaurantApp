@@ -1,0 +1,104 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to right, #f8e1f4, #e1f5fe);
+}
+
+/* Header */
+.header {
+    background-color: darkred;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Container */
+.container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+/* Menu Section */
+.menu {
+    width: 60%;
+}
+
+/* Item Card */
+.item {
+    background: white;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px gray;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .item h3 {
+        margin: 0;
+    }
+
+/* Quantity Controls */
+.qty {
+    display: flex;
+    align-items: center;
+}
+
+    .qty input {
+        width: 50px;
+        text-align: center;
+        margin: 0 5px;
+    }
+
+/* Buttons */
+button {
+    background-color: darkred;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+    button:hover {
+        background-color: crimson;
+    }
+
+/* Cart Section */
+.cart {
+    width: 30%;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px gray;
+}
+
+    .cart h2 {
+        margin-top: 0;
+    }
+
+    .cart ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .cart li {
+        padding: 8px;
+        border-bottom: 1px solid #ccc;
+    }
+
+/* Total */
+.total {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Empty Cart */
+.empty {
+    color: gray;
+}

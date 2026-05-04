@@ -1,0 +1,47 @@
+﻿@using RestaurantApp.Models
+
+@{
+    var items = ViewBag.Items ?? new List<Item>();
+    var cart = ViewBag.Cart ?? new List<CartItem>();
+}
+
+<h1> Restaurant Menu</h1>
+
+@foreach (var item in items)
+{
+    <form method="post" action="/Menu/AddToCart">
+        <div style="margin-bottom:15px; border:1px solid #ccc; padding:10px;">
+            <h3>@item.Name</h3>
+            <p>₹@item.Price</p>
+
+            <input type="hidden" name="id" value="@item.Id" />
+            <input type="number" name="qty" value="1" min="1" />
+
+            <button type="submit">Add to Cart</button>
+        </div>
+    </form>
+}
+
+<hr />
+
+<h2> Cart</h2>
+
+@if (cart.Count == 0)
+{
+    <p>Cart is empty</p>
+}
+else
+{
+    <ul>
+        @foreach (var c in cart)
+        {
+            <li>
+                @c.Item.Name x @c.Quantity = ₹@c.Total
+            </li>
+        }
+    </ul>
+}
+
+<h2>Total: ₹@ViewBag.Total</h2>
+
+<a href="/Menu/ClearCart">Clear Cart</a>
