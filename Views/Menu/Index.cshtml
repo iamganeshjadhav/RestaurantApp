@@ -5,7 +5,19 @@
     var cart = ViewBag.Cart ?? new List<CartItem>();
 }
 
-<h1> Restaurant Menu</h1>
+<h1>Restaurant Menu</h1>
+
+@if (Context.Session.GetString("User") != null)
+{
+    <h3>Welcome @Context.Session.GetString("User")</h3>
+    <a href="/Account/Logout">Logout</a>
+}
+else
+{
+    <a href="/Account/Login">Login</a>
+}
+
+<hr />
 
 @foreach (var item in items)
 {
@@ -17,14 +29,26 @@
             <input type="hidden" name="id" value="@item.Id" />
             <input type="number" name="qty" value="1" min="1" />
 
-            <button type="submit">Add to Cart</button>
+            @if (Context.Session.GetString("User") != null)
+            {
+                <button type="submit">Add to Cart</button>
+            }
+            else
+            {
+                <a href="/Account/Login">Login to Add</a>
+            }
         </div>
     </form>
 }
 
 <hr />
 
-<h2> Cart</h2>
+<h2>Cart</h2>
+
+@if (Context.Session.GetString("User") != null)
+{
+    <p>User: @Context.Session.GetString("User")</p>
+}
 
 @if (cart.Count == 0)
 {

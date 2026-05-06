@@ -14,16 +14,21 @@ namespace RestaurantApp.Controllers
             _context = context;
         }
 
-        
+    
         public IActionResult Index()
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
             var items = _context.Items.ToList();
+
             var cart = _context.CartItems
-             .Include(x => x.Item)
-               .ToList();
+                .Include(x => x.Item)
+                .Where(x => userId != null && x.UserId == userId)
+                .ToList();
 
             ViewBag.Items = items;
             ViewBag.Cart = cart;
+            ViewBag.Username = HttpContext.Session.GetString("User");
 
             ViewBag.Total = cart.Sum(x => x.Item.Price * x.Quantity);
 
@@ -34,12 +39,20 @@ namespace RestaurantApp.Controllers
         [HttpPost]
         public IActionResult AddToCart(int id, int qty)
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var item = _context.Items.Find(id);
 
             if (item == null)
                 return NotFound();
 
-            var existing = _context.CartItems.FirstOrDefault(x => x.ItemId == id);
+            var existing = _context.CartItems
+                .FirstOrDefault(x => x.ItemId == id && x.UserId == userId);
 
             if (existing != null)
             {
@@ -50,7 +63,8 @@ namespace RestaurantApp.Controllers
                 _context.CartItems.Add(new CartItem
                 {
                     ItemId = id,
-                    Quantity = qty
+                    Quantity = qty,
+                    UserId = userId.Value
                 });
             }
 
@@ -59,11 +73,19 @@ namespace RestaurantApp.Controllers
             return RedirectToAction("Index");
         }
 
-       
+        
         public IActionResult ClearCart()
         {
-            _context.CartItems.RemoveRange(_context.CartItems);
-            _context.SaveChanges();
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            if (userId != null)
+            {
+                var userCart = _context.CartItems
+                    .Where(x => x.UserId == userId);
+
+                _context.CartItems.RemoveRange(userCart);
+                _context.SaveChanges();
+            }
 
             return RedirectToAction("Index");
         }

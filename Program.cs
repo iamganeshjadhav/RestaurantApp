@@ -10,6 +10,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")
     ));
 
+builder.Services.AddSession();
+
 var app = builder.Build();
 
 
@@ -42,10 +44,13 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+app.UseSession();
+
+app.UseAuthentication();
+
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Menu}/{action=Index}/{id?}");
+    pattern: "{controller=Account}/{action=Login}/{id?}");
 
 app.Run();
