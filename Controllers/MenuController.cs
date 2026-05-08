@@ -89,5 +89,40 @@ namespace RestaurantApp.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        public IActionResult PlaceOrder()
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var cart = _context.CartItems
+                .Include(x => x.Item)
+                .Where(x => x.UserId == userId)
+                .ToList();
+
+            foreach (var c in cart)
+            {
+                _context.OrderDetails.Add(new OrderDetails
+                {
+                    ItemId = c.ItemId,
+                    UserId = c.UserId,
+                    Price = c.Item.Price,
+                    Quantity = c.Quantity
+                });
+            }
+
+            _context.SaveChanges();
+
+            _context.CartItems.RemoveRange(cart);
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
     }
 }

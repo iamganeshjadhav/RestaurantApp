@@ -10,6 +10,7 @@
 @if (Context.Session.GetString("User") != null)
 {
     <h3>Welcome @Context.Session.GetString("User")</h3>
+    
     <a href="/Account/Logout">Logout</a>
 }
 else
@@ -47,7 +48,8 @@ else
 
 @if (Context.Session.GetString("User") != null)
 {
-    <p>User: @Context.Session.GetString("User")</p>
+    <p>User: @Context.Session.GetString("User") and Your Id is @Context.Session.GetInt32("UserId")</p>
+    <p> Visite Again</p>
 }
 
 @if (cart.Count == 0)
@@ -67,5 +69,9 @@ else
 }
 
 <h2>Total: ₹@ViewBag.Total</h2>
+
+<form method="post" action="/Menu/PlaceOrder">
+    <button type="submit">Place Order</button>
+</form>
 
 <a href="/Menu/ClearCart">Clear Cart</a>
